@@ -1,0 +1,12 @@
+[14/Sep/2015 04:49:19] "GET / HTTP/1.1" 200 3383
+[14/Sep/2015 04:49:20] "GET /static/bower_components/bootstrap/dist/js/bootstrap.min.js HTTP/1.1" 304 0
+[14/Sep/2015 04:49:20] "GET /static/bower_components/jquery/dist/jquery.min.js HTTP/1.1" 304 0
+[14/Sep/2015 04:49:20] "GET /static/bower_components/font-awesome/css/font-awesome.min.css HTTP/1.1" 304 0
+[14/Sep/2015 04:49:20] "GET /static/bower_components/metisMenu/dist/metisMenu.min.css HTTP/1.1" 304 0
+[14/Sep/2015 04:49:20] "GET /static/bower_components/bootstrap/dist/css/bootstrap.min.css HTTP/1.1" 304 0
+[14/Sep/2015 04:49:20] "GET /static/bower_components/metisMenu/dist/metisMenu.min.js HTTP/1.1" 304 0
+[14/Sep/2015 04:49:20] "GET /static/dist/css/sb-admin-2.css HTTP/1.1" 304 0
+[14/Sep/2015 04:49:20] "GET /static/dist/js/sb-admin-2.js HTTP/1.1" 304 0
+[14/Sep/2015 04:49:22] "POST /authin/ HTTP/1.1" 200 53269
+[14/Sep/2015 04:49:22] "GET /static/dist/css/sb-admin-2.css HTTP/1.1" 304 0
+[14/Sep/2015 04:49:22] "GET /static/dist/js/sb-admin-2.js HTTP/1.1" 304 0
