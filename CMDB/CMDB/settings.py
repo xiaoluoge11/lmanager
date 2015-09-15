@@ -1,5 +1,6 @@
 # Django settings for CMDB project.
-
+from settings_config import dbconfig
+mysql = dbconfig() 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -12,12 +13,12 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'cmdb',                      # Or path to database file if using sqlite3.
+        'NAME': mysql["name"],                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '3306',                      # Set to empty string for default.
+        'USER': mysql["user"],
+        'PASSWORD': mysql["pass"],
+        'HOST': mysql["host"],                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': mysql["port"],                      # Set to empty string for default.
     }
 }
 
