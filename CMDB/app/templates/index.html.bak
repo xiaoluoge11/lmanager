@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>一站科技</title>
+    <title>Lmanage</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -375,7 +375,7 @@ div.FixedHeader_Cloned table {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">一站科技</a>
+                <a class="navbar-brand" href="index.html">Lmanage</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -472,7 +472,7 @@ div.FixedHeader_Cloned table {
 <!--                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a>
                         </li>
                         <li class="divider"></li>
- -->                        <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+ -->                        <li><a href="/login"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -495,34 +495,34 @@ div.FixedHeader_Cloned table {
                             </div>
                         </li>
                         <li>
-                            <a href="/"><i class="fa fa-dashboard fa-fw"></i> 控制台</a>
+                            <a href="/index"><i class="fa fa-dashboard fa-fw"></i> 控制台</a>
                         </li>
                         <li>
-                            <a href="/idc"><i class="fa fa-tasks fa-fw"></i>idc</a>
+                            <a href="/idc"><i class="fa fa-tasks fa-fw"></i>机房管理</a>
                         </li>
 			<li>
-                            <a href="/mac"><i class="fa fa-tasks fa-fw"></i>机器管理</a>
+                            <a href="/mac"><i class="fa fa-tasks fa-fw"></i>主机管理</a>
                         </li>
 			<li>
-			    <a href="/asset"><i class="fa fa-tasks fa-fw"></i>IT资产审计</a> 
+			    <a href="/asset"><i class="fa fa-tasks fa-fw"></i>资产审计</a> 
 			</li>
                         <li>
-                            <a href="/asset_auto"><i class="fa fa-tasks fa-fw"></i> CMDB自动收集</a>
+                            <a href="/asset_auto"><i class="fa fa-tasks fa-fw"></i>资产采集</a>
                         </li>
 			<li>
-                            <a href="/group"><i class="fa fa-support fa-fw"></i>批量分组</a>
+                            <a href="/group"><i class="fa fa-support fa-fw"></i>分组管理</a>
                         </li>
 			<li>
-                            <a href="/file"><i class="fa fa-support fa-fw"></i>文件批量推送</a>
+                            <a href="/file"><i class="fa fa-support fa-fw"></i>文件推送</a>
                         </li>
 			<li>
-                            <a href="/command"><i class="fa fa-support fa-fw"></i>单台命令管理</a>
+                            <a href="/command"><i class="fa fa-support fa-fw"></i>单台命令</a>
                         </li>
                         <li>
-                            <a href="/command_group"><i class="fa fa-support fa-fw"></i>远程批量命令</a>
+                            <a href="/command_group"><i class="fa fa-support fa-fw"></i>批量命令</a>
                         </li>
 			<li>
-                            <a href="/job"><i class="fa fa-support fa-fw"></i>IT任务流程</a>
+                            <a href="/job"><i class="fa fa-support fa-fw"></i>任务流程</a>
                         </li>
 <!--                         <li>
                             <a href="/chart"><i class="fa fa-bar-chart-o fa-fw"></i> 图表<span class="fa arrow"></span></a>
@@ -560,7 +560,7 @@ div.FixedHeader_Cloned table {
                                     <i class="fa fa-support fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">2</div>
+                                    <div class="huge">{{idc_num}}</div>
                                     <div>IDC总数</div>
                                 </div>
                             </div>
@@ -582,7 +582,7 @@ div.FixedHeader_Cloned table {
                                     <i class="fa fa-tasks fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">110</div>
+                                    <div class="huge">{{host_num}}</div>
                                     <div>机器总数</div>
                                 </div>
                             </div>
