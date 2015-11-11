@@ -45,4 +45,8 @@ urlpatterns = patterns('',
     (r'asset/asset_delete/$',asset_delete),
     (r'^authin/$',authin),
     (r'accounts/login/$','django.contrib.auth.views.login',{'template_name':'login.html'}),
+    (r'^monitor/$',monitor),
+    (r'^data/$',getdata),
+    (r'monitor_result/$',monitor_result),
+    (r'monitor_data/$',monitor_data), 
 )

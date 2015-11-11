@@ -10,7 +10,13 @@ from django import  forms
 from app.models import *
 from app.backend.saltapi  import SaltAPI
 from app.backend.asset_info import *
-import  ConfigParser,sys,json,os
+import MySQLdb as mysql
+import  ConfigParser,sys,json,os,time,pickle
+
+db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
+db.autocommit(True)
+c = db.cursor()
+
 def saltstack():
     config = ConfigParser.ConfigParser()  
     config.read("/web/CMDB/app/backend/config.ini")
@@ -343,3 +349,87 @@ def addgroup_host(request):
         g = Group.objects.get(id=group_id)
 	h.group.add(g)
 	return HttpResponse('ok')
+def monitor(request):
+    data = []
+    host = []
+    c = db.cursor()
+    c.execute("SELECT `name` from `key_name`")
+    one = c.fetchall()
+    d = db.cursor()
+    d.execute("SELECT `hostname` from `statusinfo`")
+    hostname = d.fetchall()
+    for i in one:
+        data.append(i[0])
+    for x in hostname:
+	host.append(x[0])
+    host = list(set(host))
+    print host
+    return render_to_response("monitor.html",locals())
+def getdata(request):
+    if request.method == 'GET':
+	data_list = []
+	item = str(request.GET.get('item'))
+	start =str(request.GET.get('from'))
+	stop  = str(request.GET.get('to'))
+	host = str(request.GET.get('host'))
+	if item != 'None':
+	    data_list = [item,start,stop,host]
+	    print data_list
+	    f = open("/web/CMDB/app/backend/monitor_data.txt",'w')
+            try:
+	        for i in data_list:
+                    f.write(i)
+		    f.write("\n")
+            finally:
+                f.close()
+	if item == 'None':
+	    pass 
+	return HttpResponse('ok')
+def monitor_result(request):
+    return render_to_response('monitor_result.html')
+def monitor_data(request):
+    data = []
+    f = open("/web/CMDB/app/backend/monitor_data.txt")
+    try:
+        lines = f.readlines()
+    finally:
+        f.close()
+    for line in lines:
+        data.append(line.strip())
+    item = data[0]
+    start = data[1]
+    stop = data[2]
+    host = data[3]
+    if start == '' and stop == '':
+	starttime = int(time.time())
+	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` < %d" %(item,host,starttime))
+	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
+	return HttpResponse(json.dumps(ones))	
+    if start == '' and stop != '':
+	print stop
+    	timeStamp = changedate(stop)
+	print timeStamp
+	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` < %d" %(item,host,timeStamp))
+        ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
+	return HttpResponse(json.dumps(ones))
+    if start != '' and stop == '':
+	print start
+	start_timeArray = time.strptime(start,"%Y-%m-%d %H:%M:%S")
+	start_timeStamp = int(time.mktime(start_timeArray))
+	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` > %d" %(item,host,start_timeStamp))
+	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
+	print ones
+        return HttpResponse(json.dumps(ones))
+    if start != '' and stop != '':
+        start_timeArray = time.strptime(start,"%Y-%m-%d %H:%M:%S")     
+        start_timeStamp = int(time.mktime(start_timeArray))
+        stop_timeArray = time.strptime(stop,"%Y-%m-%d %H:%M:%S")
+        stop_timeStamp = int(time.mktime(stop_timeArray))
+        c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` > %d and `time < %d`" %(item,host,start_timeStamp,stop_timeStamp))	
+	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
+        return HttpResponse(json.dumps(ones))
+def changedate(data):
+    a = data
+    timeArray = time.strptime(a, "%Y-%m-%d %H:%M:%S")
+    timeStamp = int(time.mktime(timeArray))
+    return timeStamp
