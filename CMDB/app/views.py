@@ -12,7 +12,6 @@ from app.backend.saltapi  import SaltAPI
 from app.backend.asset_info import *
 import MySQLdb as mysql
 import  ConfigParser,sys,json,os,time,pickle
-
 db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
 db.autocommit(True)
 c = db.cursor()
@@ -40,6 +39,11 @@ def read_track_mark():
     finally:
 	f.close()
     return num
+def date_result(data):
+    timeArray = time.strptime(data, "%Y-%m-%d %H:%M:%S")
+    timeStamp = int(time.mktime(timeArray)) - 50400
+    return timeStamp
+ 
 @login_required
 def index(request): 
     total_idc =Idc.objects.aggregate(Count('idc_name'))
@@ -406,30 +410,19 @@ def monitor_data(request):
 	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
 	return HttpResponse(json.dumps(ones))	
     if start == '' and stop != '':
-	print stop
-    	timeStamp = changedate(stop)
-	print timeStamp
+	stop = stop.strip()
+    	timeStamp = date_result(stop)
 	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` < %d" %(item,host,timeStamp))
         ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
 	return HttpResponse(json.dumps(ones))
     if start != '' and stop == '':
-	print start
-	start_timeArray = time.strptime(start,"%Y-%m-%d %H:%M:%S")
-	start_timeStamp = int(time.mktime(start_timeArray))
-	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` > %d" %(item,host,start_timeStamp))
-	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
-	print ones
-        return HttpResponse(json.dumps(ones))
-    if start != '' and stop != '':
-        start_timeArray = time.strptime(start,"%Y-%m-%d %H:%M:%S")     
-        start_timeStamp = int(time.mktime(start_timeArray))
-        stop_timeArray = time.strptime(stop,"%Y-%m-%d %H:%M:%S")
-        stop_timeStamp = int(time.mktime(stop_timeArray))
-        c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` > %d and `time < %d`" %(item,host,start_timeStamp,stop_timeStamp))	
+	timeStamp=date_result(data)
+	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` > %d" %(item,host,timeStamp))
 	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
         return HttpResponse(json.dumps(ones))
-def changedate(data):
-    a = data
-    timeArray = time.strptime(a, "%Y-%m-%d %H:%M:%S")
-    timeStamp = int(time.mktime(timeArray))
-    return timeStamp
+    if start != '' and stop != '': 
+        start_timeStamp = date_result(start) 
+        stop_timeStamp = date_result(stop)
+        c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` > %d and `time` < %d" %(item,host,start_timeStamp,stop_timeStamp))	
+	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
+        return HttpResponse(json.dumps(ones))
